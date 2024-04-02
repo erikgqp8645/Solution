@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+<resheader name="resmimetype"><value>text/microsoft-resx</value></resheader><resheader name="version"><value>1.3</value></resheader><resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader><data name="InternalCompilerError" xml:space="preserve"><value>An unexpected exception occurred while binding a dynamic operation</value></data>
+  <data name="BindPropertyFailedMethodGroup" xml:space="preserve"><value>The name '{0}' is bound to a method and cannot be used like a property</value></data>
+  <data name="BindRequireArguments" xml:space="preserve"><value>Cannot bind call with no calling object</value></data>
+  <data name="BindBinaryOperatorRequireTwoArguments" xml:space="preserve"><value>Binary operators must be invoked with two arguments</value></data>
+  <data name="NullReferenceOnMemberException" xml:space="preserve"><value>Cannot perform runtime binding on a null reference</value></data>
+  <data name="BindBinaryAssignmentRequireTwoArguments" xml:space="preserve"><value>Binary operators cannot be invoked with one argument</value></data>
+  <data name="BindImplicitConversionRequireOneArgument" xml:space="preserve"><value>Implicit conversion takes exactly one argument</value></data>
+  <data name="EmptyDynamicView" xml:space="preserve"><value>No further information on this object could be discovered</value></data>
+  <data name="BindToVoidMethodButExpectResult" xml:space="preserve"><value>Cannot implicitly convert type 'void' to 'object'</value></data>
+  <data name="BindUnaryOperatorRequireOneArgument" xml:space="preserve"><value>Unary operators must be invoked with one argument</value></data>
+  <data name="BindCallToConditionalMethod" xml:space="preserve"><value>Cannot dynamically invoke method '{0}' because it has a Conditional attribute</value></data>
+  <data name="BindCallFailedOverloadResolution" xml:space="preserve"><value>Overload resolution failed</value></data>
+  <data name="BindExplicitConversionRequireOneArgument" xml:space="preserve"><value>Explicit conversion takes exactly one argument</value></data>
+  <data name="BindPropertyFailedEvent" xml:space="preserve"><value>The event '{0}' can only appear on the left hand side of += or -=</value></data>
+  <data name="GetValueonWriteOnlyProperty" xml:space="preserve"><value>Write Only properties are not supported</value></data>
+  <data name="BindInvokeFailedNonDelegate" xml:space="preserve"><value>Cannot invoke a non-delegate type</value></data>
+  <data name="BindBinaryAssignmentFailedNullReference" xml:space="preserve"><value>Cannot perform member assignment on a null reference</value></data>
+  </root>

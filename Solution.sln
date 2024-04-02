@@ -1,0 +1,43 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyEditingTool", "PropertyEditingTool\PropertyEditingTool.csproj", "{69E00FAB-5EA4-400A-B033-68AA896C9157}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8} = {C38C85F1-2754-45FC-B32A-C536EBF8FBA8}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MD_SW_ConnectSW", "MD_SW_ConnectSW\MD_SW_ConnectSW.csproj", "{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AnyCPU = Debug|AnyCPU
+		Debug|x86 = Debug|x86
+		Release|AnyCPU = Release|AnyCPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Debug|AnyCPU.ActiveCfg = Debug|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Debug|AnyCPU.Build.0 = Debug|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Debug|x86.ActiveCfg = Debug|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Debug|x86.Build.0 = Debug|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Release|AnyCPU.ActiveCfg = Release|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Release|AnyCPU.Build.0 = Release|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Release|x86.ActiveCfg = Release|AnyCPU
+		{69E00FAB-5EA4-400A-B033-68AA896C9157}.Release|x86.Build.0 = Release|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Debug|AnyCPU.ActiveCfg = Debug|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Debug|AnyCPU.Build.0 = Debug|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Debug|x86.ActiveCfg = Debug|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Debug|x86.Build.0 = Debug|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Release|AnyCPU.ActiveCfg = Release|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Release|AnyCPU.Build.0 = Release|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Release|x86.ActiveCfg = Release|AnyCPU
+		{C38C85F1-2754-45FC-B32A-C536EBF8FBA8}.Release|x86.Build.0 = Release|AnyCPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB4DAF8C-D49C-4E7B-91FC-F36B6CA89B24}
+	EndGlobalSection
+EndGlobal
