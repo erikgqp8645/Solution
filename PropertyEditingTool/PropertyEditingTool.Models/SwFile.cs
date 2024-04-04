@@ -58,6 +58,6 @@ public class SwFile
 	public SwFile(string fullName)
 	{
 		FullName = fullName;
-		listSwProperty = new List<SwProperty>();
+		listSwProperty = new List<SwProperty>(); 
 	}
 }
