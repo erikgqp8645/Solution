@@ -6,6 +6,7 @@ namespace PropertyEditingTool.Models;
 public class SwFile
 {
 	public string Name => Path.GetFileName(FullName);
+	public string NameWithoutExtension => Path.GetFileNameWithoutExtension(FullName);
 
 	public string FileType
 	{

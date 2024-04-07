@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MD_SW_ConnectSW;
 using PropertyEditingTool.Models;
 using SolidWorks.Interop.sldworks;
@@ -899,9 +900,15 @@ internal class SldWorkService
         return asmFilels;
     }
 
+    /// <summary>
+    /// 添加自定义属性
+    /// </summary>
+    /// <param name="swFile"></param>
+    /// <param name="skip"></param>
     public void AddCustomProperty(SwFile swFile, int skip)
     {
         string fileName = swFile.Name;
+        string NameWithoutExt = swFile.NameWithoutExtension; //不带后缀的文件名
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc;
         ICustomPropertyManager swCusPropMgr = ((IModelDocExtension)swDoc.Extension).get_CustomPropertyManager("");
         _ = swDoc.Extension;
@@ -911,12 +918,17 @@ internal class SldWorkService
             string propertyName = item.PropertyName;
             string rule = item.Rule;
             string propertyValue = "";
+            string fileName2 = NameWithoutExt;
+
+
             if (rule.Contains("文件名[-]"))
             {
                 string[] splitResult = fileName.Split('-');
-                if (splitResult.Length >= 1)
+                string[] splitResult2 = fileName2.Split('-');
+                if (splitResult2.Length >= 1)
                 {
-                    propertyValue = splitResult[0];
+                    int? number = ExtractNumberFromRule(rule);
+                    propertyValue = splitResult2[(int)number-1];
                 }
                 swCusPropMgr.Add2(propertyName, 30, propertyValue);
             }
@@ -1014,9 +1026,16 @@ internal class SldWorkService
         }
     }
 
+
+    /// <summary>
+    /// 添加配置属性
+    /// </summary>
+    /// <param name="swFile"></param>
+    /// <param name="skip"></param>
     public void AddConfigProperty(SwFile swFile, int skip)
     {
         string fileName = swFile.Name;
+        string NameWithoutExt = swFile.NameWithoutExtension; //不带后缀的文件名
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc;
         IConfiguration config = (IConfiguration)(dynamic)swDoc.GetActiveConfiguration();
         ICustomPropertyManager swCusPropMgr = config.CustomPropertyManager;
@@ -1027,12 +1046,15 @@ internal class SldWorkService
             string propertyName = item.PropertyName;
             string rule = item.Rule;
             string propertyValue = "";
+            string fileName2 = NameWithoutExt;
             if (rule.Contains("文件名[-]"))
             {
                 string[] splitResult = fileName.Split('-');
+                string[] splitResult2 = fileName2.Split('-');
                 if (splitResult.Length >= 1)
                 {
-                    propertyValue = splitResult[0];
+                    int? number = ExtractNumberFromRule(rule);
+                    propertyValue = splitResult2[(int)number - 1];
                 }
                 swCusPropMgr.Add2(propertyName, 30, propertyValue);
             }
@@ -1138,6 +1160,7 @@ internal class SldWorkService
     public void AddAllConfigProperty(SwFile swFile, int skip)
     {
         string fileName = swFile.Name; // 文件名
+        string NameWithoutExt = swFile.NameWithoutExtension; // 不带后缀的文件名
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc; // 激活的文档
         string[] array = (string[])(dynamic)swDoc.GetConfigurationNames(); // 获取所有配置名
         foreach (string configName in array)
@@ -1153,9 +1176,11 @@ internal class SldWorkService
                 if (rule.Contains("文件名[-]"))
                 {
                     string[] splitResult = fileName.Split('-');
-                    if (splitResult.Length >= 1)
+                    string[] splitResult2 = NameWithoutExt.Split('-');
+                    if (splitResult2.Length >= 1)
                     {
-                        propertyValue = splitResult[0];
+                        int? number = ExtractNumberFromRule(rule);
+                        propertyValue = splitResult2[(int)number - 1];
                     }
                     swCusPropMgr.Add2(propertyName, 30, propertyValue);
                 }
@@ -1265,5 +1290,46 @@ internal class SldWorkService
                 }
             }
         }
+    }
+    public void ProcessRuleMid(string rule, string delimiter, string fileName, CustomPropertyManager swCusPropMgr, string propertyName)
+    {
+        string rulePattern = $"文件名[{delimiter}]";
+        if (rule.Contains(rulePattern))
+        {
+            string[] splitResult = fileName.Split(new string[] { delimiter }, StringSplitOptions.None);
+            if (splitResult.Length >= 1)
+            {
+                string propertyValue = splitResult[0];
+                swCusPropMgr.Add2(propertyName, 30, propertyValue);
+            }
+        }
+    }
+
+    public string ProcessRuleLast(string rule, string LastNum, string fileName, string propertyName)
+    {
+        string rulePattern = $"文件名[-][{LastNum}]";
+        if (rule.Contains(rulePattern))
+        {
+            string[] splitResult = fileName.Split('-');
+            if (splitResult.Length >= 1)
+            {
+                for (int i = 0; i < splitResult.Length - 1; i++)
+                {
+                    splitResult[0] += "-" + splitResult[i + 1];
+                }
+                return splitResult[0];
+            }
+        }
+        return null;
+    }
+
+    public int? ExtractNumberFromRule(string rule)
+    {
+        var match = Regex.Match(rule, @"文件名\[-\]\[(\d+)\]");
+        if (match.Success)
+        {
+            return int.Parse(match.Groups[1].Value);
+        }
+        return null;
     }
 }
