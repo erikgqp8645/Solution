@@ -919,12 +919,12 @@ internal class SldWorkService
             string rule = item.Rule;
             string propertyValue = "";
             string fileName2 = NameWithoutExt;
+            string delimiter = ExtractDelimiterFromRule(rule); //提取分隔符
 
-
-            if (rule.Contains("文件名[-]"))
+            if (rule.Contains($"文件名[{delimiter}]"))
             {
-                string[] splitResult = fileName.Split('-');
-                string[] splitResult2 = fileName2.Split('-');
+                string[] splitResult = fileName.Split(delimiter[0]);
+                string[] splitResult2 = fileName2.Split(delimiter[0]);
                 if (splitResult2.Length >= 1)
                 {
                     int? number = ExtractNumberFromRule(rule);
@@ -1047,10 +1047,12 @@ internal class SldWorkService
             string rule = item.Rule;
             string propertyValue = "";
             string fileName2 = NameWithoutExt;
-            if (rule.Contains("文件名[-]"))
+            string delimiter = ExtractDelimiterFromRule(rule); //提取分隔符
+
+            if (rule.Contains($"文件名[{delimiter}]"))
             {
                 string[] splitResult = fileName.Split('-');
-                string[] splitResult2 = fileName2.Split('-');
+                string[] splitResult2 = fileName2.Split(delimiter[0]);
                 if (splitResult.Length >= 1)
                 {
                     int? number = ExtractNumberFromRule(rule);
@@ -1173,10 +1175,11 @@ internal class SldWorkService
                 string propertyName = item.PropertyName;
                 string rule = item.Rule;
                 string propertyValue = "";
-                if (rule.Contains("文件名[-]"))
+                string delimiter = ExtractDelimiterFromRule(rule); //提取分隔符
+                if (rule.Contains($"文件名[{delimiter}]"))
                 {
                     string[] splitResult = fileName.Split('-');
-                    string[] splitResult2 = NameWithoutExt.Split('-');
+                    string[] splitResult2 = NameWithoutExt.Split(delimiter[0]);
                     if (splitResult2.Length >= 1)
                     {
                         int? number = ExtractNumberFromRule(rule);
@@ -1325,10 +1328,20 @@ internal class SldWorkService
 
     public int? ExtractNumberFromRule(string rule)
     {
-        var match = Regex.Match(rule, @"文件名\[-\]\[(\d+)\]");
+        var match = Regex.Match(rule, @"文件名\[[-_ +]\]\[(\d+)\]");
         if (match.Success)
         {
             return int.Parse(match.Groups[1].Value);
+        }
+        return null;
+    }
+
+    public string ExtractDelimiterFromRule(string rule)
+    {
+        var match = Regex.Match(rule, @"文件名\[([-_ +])\]\[\d+\]");
+        if (match.Success)
+        {
+            return match.Groups[1].Value;
         }
         return null;
     }
