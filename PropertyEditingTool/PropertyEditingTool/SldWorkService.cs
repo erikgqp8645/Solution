@@ -153,6 +153,12 @@ internal class SldWorkService
         return value;
     }
 
+    /// <summary>
+    /// //编辑配置属性
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="configName"></param>
+    /// <returns></returns>
     private string AnalysisConfigPropValue(string value, string configName)
     {
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc;
@@ -184,6 +190,10 @@ internal class SldWorkService
         return value;
     }
 
+    /// <summary>
+    /// //编辑配置属性
+    /// </summary>
+    /// <param name="prop"></param>
     public void EditConfigProp(SwProperty prop)
     {
         CustomPropertyManager swCusPropMgr = ((Configuration)(dynamic)swDoc.GetConfigurationByName(prop.ConfigName)).CustomPropertyManager;
@@ -335,7 +345,7 @@ internal class SldWorkService
     {
         swFile.listSwProperty = FileHelper.Clone(swProps);
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc;
-        Configuration config = (dynamic)swDoc.GetActiveConfiguration();
+        Configuration config = (dynamic)swDoc.GetActiveConfiguration(); // 获取当前配置
         foreach (SwProperty prop in swFile.listSwProperty)
         {
             prop.FullName = swFile.FullName;
@@ -394,12 +404,12 @@ internal class SldWorkService
                         prop.ErrorInfo = "属性名“" + prop.New_Name + "”已存在";
                         break;
                     }
-                    if (!propNames.Contains(prop.Old_Name))
+                    if (!propNames.Contains(prop.Old_Name)) // 判断是否存在原属性名
                     {
                         prop.ErrorInfo = "原属性名“" + prop.Old_Name + "”不存在";
                         break;
                     }
-                    string value = ((IModelDoc2)swDoc).get_CustomInfo(prop.Old_Name);
+                    string value = ((IModelDoc2)swDoc).get_CustomInfo(prop.Old_Name); // 获取原属性值 TODO
                     prop.New_Value = value;
                     swDoc.AddCustomInfo2(prop.New_Name, prop.Type, (prop.New_Value == null) ? string.Empty : prop.New_Value.ToString());
                     swDoc.DeleteCustomInfo(prop.Old_Name);
@@ -600,6 +610,12 @@ internal class SldWorkService
         prop.ErrorInfo = "修改成功";
     }
 
+    /// <summary>
+    /// //自定义属性转移到配置属性
+    /// </summary>
+    /// <param name="swFile"></param>
+    /// <param name="type"></param>
+    /// <param name="listPropName"></param>
     public void CustomTransferToConfig(SwFile swFile, int type, List<string> listPropName)
     {
         string[] propNames = GetCusPropNameList(type, listPropName);
@@ -945,7 +961,7 @@ internal class SldWorkService
                 if (splitResult2.Length >= 1)
                 {
                     int? number = ExtractNumberFromRule(rule);
-                    propertyValue = splitResult2[(int)number-1];
+                    propertyValue = splitResult2[(int)number - 1];
                 }
                 swCusPropMgr.Add2(propertyName, 30, propertyValue);
             }
@@ -1187,7 +1203,7 @@ internal class SldWorkService
             ICustomPropertyManager swCusPropMgr = ((IModelDocExtension)swDoc.Extension).get_CustomPropertyManager(configName);// 获取配置属性管理器
             _ = swDoc.Extension;
             string[] propertyNames = (string[])(dynamic)swCusPropMgr.GetNames(); // 获取所有属性名
-            foreach (SwAddProperty item in swFile.listSwAddProperty)
+            foreach (SwAddProperty item in swFile.listSwAddProperty) // 遍历配置添加属性列表
             {
                 string propertyName = item.PropertyName;
                 string rule = item.Rule;
@@ -1204,6 +1220,13 @@ internal class SldWorkService
                     }
                     swCusPropMgr.Add2(propertyName, 30, propertyValue);
                 }
+                // TODO 这里增加一个if添加组合属性的方法
+                if (rule.Contains($"组合属性"))
+                {
+                    propertyValue = swCusPropMgr.Get(rule); // 获取需要组合的属性值
+                    swCusPropMgr.Add2(propertyName, 30, propertyValue);
+                }
+
                 else
                 {
                     switch (rule)
@@ -1362,4 +1385,21 @@ internal class SldWorkService
         }
         return null;
     }
+
+    /// <summary>
+    ///  提取中括号内容
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns> 返回一个新列表
+    public List<string> ExtractBracketContent(string input)
+    {
+        var matches = Regex.Matches(input, @"\[(.*?)\]");
+        var result = new List<string>();
+        foreach (Match match in matches)
+        {
+            result.Add(match.Value);
+        }
+        return result;
+    }
+
 }

@@ -829,7 +829,7 @@ public class FrmMain : Form
         {
             case "修改属性名":
                 swProp.Old_Name = dgvEditProp.Rows[0].Cells["OldName"].Value.ToString();
-                swProp.New_Name = dgvEditProp.Rows[0].Cells["NewName"].Value.ToString();
+                swProp.New_Name = dgvEditProp.Rows[0].Cells["NewName"].Value.ToString(); // 读取operty的新名
                 break;
             case "原名 → 新值":
                 swProp.Old_Name = dgvEditProp.Rows[0].Cells["OldName"].Value.ToString();
@@ -1023,7 +1023,7 @@ public class FrmMain : Form
                             {
                                 foreach (SwFile current4 in swFiles)
                                 {
-                                    index = listSwFile.IndexOf(current4);
+                                    index = listSwFile.IndexOf(current4); // 获取当前文件的索引
                                     dataGridView.Invoke((Action)delegate
                                     {
                                         dataGridView.CurrentCell = dataGridView.Rows[index].Cells[0];
@@ -1033,16 +1033,16 @@ public class FrmMain : Form
                                         sw.OpenDoc(current4);
                                         if (lblDirection.Tag.ToString() == "右")
                                         {
-                                            sw.CustomTransferToConfig(current4, type, propNames);
+                                            sw.CustomTransferToConfig(current4, type, propNames); // 自定义属性转移到配置属性
                                         }
                                         else
                                         {
-                                            sw.ConfigTransferToCustom(current4, type, propNames);
+                                            sw.ConfigTransferToCustom(current4, type, propNames); // 配置属性转移到自定义属性
                                         }
                                         sw.CloseDoc(isSave: true);
                                         Invoke((Action)delegate
                                         {
-                                            SuccessRendering(index, listSwFile, listFailure);
+                                            SuccessRendering(index, listSwFile, listFailure); // 渲染成功
                                         });
                                     }
                                 }
@@ -1531,6 +1531,7 @@ public class FrmMain : Form
         cmbPropertyValue.Items.Add("$表面积");
         cmbPropertyValue.Items.Add("$配置名");
         cmbPropertyValue.Items.Add("$短日期");
+        cmbPropertyValue.Items.Add("$组合属性");
     }
 
     private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
