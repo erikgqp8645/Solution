@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using MD_SW_ConnectSW;
 using PropertyEditingTool.Models;
@@ -368,7 +369,7 @@ internal class SldWorkService
         }
     }
 
-    public void EditCustomInfo(SwProperty prop)
+    public void EditCustomInfo(SwProperty prop) // 属性编辑
     {
         swDoc = (ModelDoc2)(dynamic)swApp.ActiveDoc;
         if (prop.New_Value != null)
@@ -502,6 +503,10 @@ internal class SldWorkService
                         break;
                     }
                     prop.ErrorInfo = "属性“" + prop.Old_Name + "”不存在关键字“" + oldKey + "”";
+                    break;
+                }
+            case "拷贝(新名 → 旧值)":
+                {
                     break;
                 }
             default:
@@ -649,6 +654,12 @@ internal class SldWorkService
         }
     }
 
+    /// <summary>
+    /// 删除自定义属性
+    /// </summary>
+    /// <param name="swFile"></param>
+    /// <param name="type"></param>
+    /// <param name="listPropName"></param>
     public void DelectCustomInfo(SwFile swFile, int type, List<string> listPropName)
     {
         string[] propNames = GetCusPropNameList(type, listPropName);
@@ -677,6 +688,12 @@ internal class SldWorkService
         }
     }
 
+    /// <summary>
+    /// 删除配置义属性
+    /// </summary>
+    /// <param name="swFile"></param>
+    /// <param name="type"></param>
+    /// <param name="listPropName"></param>
     public void DelectConfigProp(SwFile swFile, int type, List<string> listPropName)
     {
         string[] propNames = GetConfigPropNameList(type, listPropName);
@@ -1328,7 +1345,7 @@ internal class SldWorkService
 
     public int? ExtractNumberFromRule(string rule)
     {
-        var match = Regex.Match(rule, @"文件名\[[-_ +]\]\[(\d+)\]");
+        var match = Regex.Match(rule, @"文件名\[[_ ]\]\[(\d+)\]");
         if (match.Success)
         {
             return int.Parse(match.Groups[1].Value);
@@ -1338,7 +1355,7 @@ internal class SldWorkService
 
     public string ExtractDelimiterFromRule(string rule)
     {
-        var match = Regex.Match(rule, @"文件名\[([-_ +])\]\[\d+\]");
+        var match = Regex.Match(rule, @"文件名\[([_ ])\]\[\d+\]");
         if (match.Success)
         {
             return match.Groups[1].Value;

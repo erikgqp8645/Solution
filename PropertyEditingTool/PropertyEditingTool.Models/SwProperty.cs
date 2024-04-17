@@ -6,13 +6,13 @@ namespace PropertyEditingTool.Models;
 [Serializable]
 public class SwProperty
 {
-	public string Old_Name { get; set; }
+	public string Old_Name { get; set; } // 旧名称
 
-	public string Old_Value { get; set; }
+	public string Old_Value { get; set; } // 原值
 
-	public string New_Name { get; set; }
+	public string New_Name { get; set; } // 新名称
 
-	public object New_Value { get; set; }
+	public object New_Value { get; set; } // 新值
 
 	public int Type
 	{
@@ -82,6 +82,10 @@ public class SwProperty
 			{
 				return "添加属性";
 			}
+			if(Old_Name == null && New_Name !=null && New_Value == null)
+			{
+                return "拷贝（新名 → 旧值）";
+            }
 			return null;
 		}
 	}

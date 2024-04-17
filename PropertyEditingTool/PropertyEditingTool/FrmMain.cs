@@ -19,15 +19,17 @@ public class FrmMain : Form
 {
     private SldWorkService sw = new SldWorkService();
 
+    // SwFile列表，用于存储SolidWorks文件
     private List<SwFile> listSwFile = new List<SwFile>();
 
+    // SwProperty列表，用于存储SolidWorks文件的属性
     private List<SwProperty> listSwProp = new List<SwProperty>();
 
-    private List<SwAddProperty> listSwAddProperty = new List<SwAddProperty>();
+    private List<SwAddProperty> listSwAddProperty = new List<SwAddProperty>();//新增属性列表
 
-    private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+    private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);//配置文件
 
-    private string drwNumName;
+    private string drwNumName; //图纸编号名称
 
     private string startNum;
 
@@ -35,9 +37,9 @@ public class FrmMain : Form
 
     private IContainer components;
 
-    private MenuStrip menuStrip;
+    private MenuStrip menuStrip; //菜单栏
 
-    private ToolStripMenuItem toolStripMenuItem;
+    private ToolStripMenuItem toolStripMenuItem; //文件
 
     private ToolStripMenuItem btnAddFile;
 
@@ -83,11 +85,13 @@ public class FrmMain : Form
 
     private DataGridViewTextBoxColumn EditResult;
 
-    private TabPage tpAddFrame;
+    private TabPage tpAddFrame; //添加框架
 
-    private TabPage tpPorpRemove;
+    private TabPage tpPorpRemove; // 移除属性
 
-    private TabPage tpPorpTransfer;
+    private TabPage tpPorpTransfer; // 转移属性
+
+    private TabPage tpSeriesEdit;// 批量编辑
 
     private Label label9;
 
@@ -223,7 +227,7 @@ public class FrmMain : Form
         ComboBox.ObjectCollection items = cboNewValue.Items;
         object[] propValues2 = SwPropValue.propValues;
         items.AddRange(propValues2);
-        List<string> rules = new List<string> { "原名 → 新值", "原值 → 新值", "（原名、原值） → 新值", "修改属性名", "添加属性", "关键字替换", "关键字替换2" };
+        List<string> rules = new List<string> { "原名 → 新值", "原值 → 新值", "（原名、原值） → 新值", "修改属性名", "添加属性", "关键字替换", "关键字替换2", "拷贝(新名 → 旧值)" };
         cboEditRules.DataSource = rules;
         cboEditRules.SelectedIndexChanged += CboEditRules_SelectedIndexChanged;
         cboEditRules.SelectedIndex = -1;
@@ -503,6 +507,11 @@ public class FrmMain : Form
         }
     }
 
+    /// <summary>
+    /// //编辑属性
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnActionFile_Click(object sender, EventArgs e)
     {
         try
@@ -531,6 +540,11 @@ public class FrmMain : Form
         }
     }
 
+    /// <summary>
+    /// //编辑属性
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void btnAllOpenFile_Click(object sender, EventArgs e)
     {
         try
@@ -773,10 +787,23 @@ public class FrmMain : Form
                 dgvEditProp.Columns["OldValue"].DefaultCellStyle = input;
                 dgvEditProp.Columns["NewName"].ReadOnly = true;
                 dgvEditProp.Columns["NewName"].DefaultCellStyle = readOnly;
-                dgvEditProp.Rows[0].Cells["NewName"].Value = null;
+                dgvEditProp.Rows[0].Cells["NewName"].Value = null;//新名
                 cboNewValue.Visible = true;
                 dgvEditProp.Columns["NewValue"].ReadOnly = false;
                 dgvEditProp.Columns["NewValue"].DefaultCellStyle = input;
+                break;
+            case "拷贝(新名 → 旧值)":
+                dgvEditProp.Columns["OldName"].ReadOnly = false;
+                dgvEditProp.Columns["OldName"].DefaultCellStyle = input;
+                //dgvEditProp.Rows[0].Cells["OldName"].Value = null;
+                dgvEditProp.Columns["OldValue"].ReadOnly = true;
+                dgvEditProp.Columns["OldValue"].DefaultCellStyle = readOnly;
+                dgvEditProp.Columns["NewName"].ReadOnly = false;
+                dgvEditProp.Columns["NewName"].DefaultCellStyle = input;
+                dgvEditProp.Rows[0].Cells["NewName"].Value = null;
+                cboNewValue.Visible = false;
+                dgvEditProp.Columns["NewValue"].ReadOnly = true;
+                dgvEditProp.Columns["NewValue"].DefaultCellStyle = readOnly;
                 break;
         }
         dgvEditProp.ClearSelection();
@@ -830,6 +857,11 @@ public class FrmMain : Form
                 swProp.Old_Value = "{" + dgvEditProp.Rows[0].Cells["OldValue"].Value.ToString() + "}";
                 swProp.New_Value = cboNewValue.Text;
                 break;
+            case "拷贝(新名 → 旧值)":
+                swProp.Old_Name = dgvEditProp.Rows[0].Cells["OldName"].Value.ToString();
+                swProp.Old_Value = "{" + dgvEditProp.Rows[0].Cells["OldValue"].Value.ToString() + "}";
+                swProp.New_Name = dgvEditProp.Rows[0].Cells["NewName"].Value.ToString();
+                break;
         }
         if (swProp.Old_Name != null && !(swProp.EditType == "修改属性名") && listSwProp.Count((SwProperty item) => item.Old_Name == swProp.Old_Name) > 0)
         {
@@ -878,7 +910,7 @@ public class FrmMain : Form
             int index = 0;
             switch (tabControl.SelectedTab.Name)
             {
-                case "tpEditProp":
+                case "tpEditProp": // 属性编辑
                     if (listSwProp.Count == 0 || listSwProp == null)
                     {
                         MessageBox.Show("请输入修改规则", "提示");
@@ -953,7 +985,7 @@ public class FrmMain : Form
                     thread.IsBackground = false;
                     thread.Start();
                     break;
-                case "tpPorpTransfer":
+                case "tpPorpTransfer": // 属性转移
                     {
                         for (int j = 0; j < dgvTransfer.RowCount; j++)
                         {
@@ -1038,7 +1070,7 @@ public class FrmMain : Form
                         thread.Start();
                         break;
                     }
-                case "tpPorpRemove":
+                case "tpPorpRemove": // 属性移除
                     {
                         for (int i = 0; i < dgvRemoveList.RowCount; i++)
                         {
@@ -1119,7 +1151,7 @@ public class FrmMain : Form
                         thread.Start();
                         break;
                     }
-                case "tpAddFrame":
+                case "tpAddFrame": // 添加图框大小大属性中
                     if (!chkWriteModel.Checked && !chkWriteDrw.Checked)
                     {
                         MessageBox.Show("请选择要将图号写入模型或是图纸", "提示");
@@ -1490,6 +1522,9 @@ public class FrmMain : Form
         cmbPropertyValue.Items.Add("$文件名");
         cmbPropertyValue.Items.Add("$文件名[-][1]");
         cmbPropertyValue.Items.Add("$文件名[-][2]");
+        cmbPropertyValue.Items.Add("$文件名[_][1]");
+        cmbPropertyValue.Items.Add("$文件名[_][2]");
+        cmbPropertyValue.Items.Add("$文件名[_][]");
         cmbPropertyValue.Items.Add("$密度");
         cmbPropertyValue.Items.Add("$材料");
         cmbPropertyValue.Items.Add("$体积");
@@ -1611,6 +1646,8 @@ public class FrmMain : Form
         this.dgvRemoveList = new System.Windows.Forms.DataGridView();
         this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
         this.tpPorpTransfer = new System.Windows.Forms.TabPage();
+        this.tpSeriesEdit = new System.Windows.Forms.TabPage(); // 系列编辑
+        // TODO：
         this.label12 = new System.Windows.Forms.Label();
         this.label11 = new System.Windows.Forms.Label();
         this.label10 = new System.Windows.Forms.Label();
@@ -1670,7 +1707,7 @@ public class FrmMain : Form
         ((System.ComponentModel.ISupportInitialize)this.dgvEditProp).BeginInit();
         ((System.ComponentModel.ISupportInitialize)this.dgv_EditProp).BeginInit();
         this.tabControl.SuspendLayout();
-        this.tbAddProperty.SuspendLayout();
+        this.tbAddProperty.SuspendLayout(); // 添加属性中
         ((System.ComponentModel.ISupportInitialize)this.dgvAddPropertyList).BeginInit();
         ((System.ComponentModel.ISupportInitialize)this.dgvAddProperty).BeginInit();
         base.SuspendLayout();
@@ -2053,7 +2090,7 @@ public class FrmMain : Form
         this.label7.Name = "label7";
         this.label7.Size = new System.Drawing.Size(189, 80);
         this.label7.TabIndex = 11;
-        this.label7.Text = "6. 关键字替换：\r\n  原关键字→ 新关键字\r\n7.关键件字替换2：\r\n  原名、原关键字→ 新关键字";
+        this.label7.Text = "6. 关键字替换：\r\n  原关键字→ 新关键字\r\n7.关键件字替换2：\r\n  原名、原关键字→ 新关键字 \r\n8. 拷贝(新名 → 旧值) \r\n 拷贝旧名称的值到新名称";
         this.cboNewValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.cboNewValue.Font = new System.Drawing.Font("微软雅黑", 9f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 134);
         this.cboNewValue.FormattingEnabled = true;
@@ -2316,7 +2353,7 @@ public class FrmMain : Form
         this.Font = new System.Drawing.Font("微软雅黑", 10.5f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 134);
         base.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
         base.Name = "FrmMain";
-        this.Text = "属性批量编辑工具";
+        this.Text = "属性批量编辑工具 By:郭小鸟";
         base.FormClosing += new System.Windows.Forms.FormClosingEventHandler(FrmMain_FormClosing);
         base.Load += new System.EventHandler(FrmMain_Load);
         this.menuStrip.ResumeLayout(false);
