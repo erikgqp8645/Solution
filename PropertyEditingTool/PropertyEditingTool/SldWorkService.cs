@@ -1223,7 +1223,11 @@ internal class SldWorkService
                 // TODO 这里增加一个if添加组合属性的方法
                 if (rule.Contains($"组合属性"))
                 {
-                    propertyValue = swCusPropMgr.Get(rule); // 获取需要组合的属性值
+
+                    List<string> tempValue = ExtractBracketContent(rule);
+                   
+                    propertyValue = swCusPropMgr.Get("名称"); // 获取需要组合的属性值
+
                     swCusPropMgr.Add2(propertyName, 30, propertyValue);
                 }
 
