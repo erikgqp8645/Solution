@@ -1532,6 +1532,7 @@ public class FrmMain : Form
         cmbPropertyValue.Items.Add("$配置名");
         cmbPropertyValue.Items.Add("$短日期");
         cmbPropertyValue.Items.Add("$组合属性");
+        cmbPropertyValue.Items.Add("$拷贝属性");
     }
 
     private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

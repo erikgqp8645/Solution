@@ -14,7 +14,7 @@ public class FrmExplain : Form
 	{
 		InitializeComponent();
 		txtExplain.ReadOnly = true;
-		txtExplain.Text = "$文件名中的代号\r\n$文件名中的名称\r\n$文件名\r\n$文件名[-][1]     说明：将文件名以'-'分割后的第一段字符,如:MD001-零件1.sldprt 分割后字符串为MD001\r\n$密度\r\n$材料\r\n$体积\r\n$表面积\r\n$配置名\r\n$短日期\r\n$PRP:'SW - 文件名称(File Name)'\r\n$PRP:'SW - Configuration Name'\r\n$PRP:'SW - Author'\r\n$PRP:'SW - Title'\r\n$PRP:'SW - Created Date'\r\n$PRP:'SW - Last Saved Date'\r\n组合属性";
+		txtExplain.Text = "$文件名中的代号\r\n$文件名中的名称\r\n$文件名\r\n$文件名[-][1]     说明：将文件名以'-'分割后的第一段字符,如:MD001-零件1.sldprt 分割后字符串为MD001\r\n$密度\r\n$材料\r\n$体积\r\n$表面积\r\n$配置名\r\n$短日期\r\n$PRP:'SW - 文件名称(File Name)'\r\n$PRP:'SW - Configuration Name'\r\n$PRP:'SW - Author'\r\n$PRP:'SW - Title'\r\n$PRP:'SW - Created Date'\r\n$PRP:'SW - Last Saved Date'\r\n组合属性\r\n拷贝属性";
 		txtExplain.Select(0, 0);
 	}
 

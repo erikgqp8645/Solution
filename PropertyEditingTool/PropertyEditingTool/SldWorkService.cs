@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using MD_SW_ConnectSW;
 using PropertyEditingTool.Models;
@@ -1224,10 +1225,22 @@ internal class SldWorkService
                 if (rule.Contains($"组合属性"))
                 {
 
-                    List<string> tempValue = ExtractBracketContent(rule);
-                   
-                    propertyValue = swCusPropMgr.Get("名称"); // 获取需要组合的属性值
+                    List<string> tempValue = ExtractContentAfterUnderscore(rule);
+                    StringBuilder combinedValue = new StringBuilder();
+                    foreach (string temp in tempValue)
+                    {
+                        string _propertyValue = swCusPropMgr.Get(temp) ?? "属性为空"; // 获取需要组合的属性值
+                        combinedValue.Append(_propertyValue).Append(" "); // 组合属性值
+                    }
+                    propertyValue = combinedValue.ToString().TrimEnd(); // 最终的组合结果，移除末尾的空格
 
+
+                    swCusPropMgr.Add2(propertyName, 30, propertyValue);
+                }
+                if (rule.Contains($"拷贝属性"))
+                {
+                    string _rule = ExtractContentWithinBrackets(rule);
+                    propertyValue = swCusPropMgr.Get(_rule) ?? "属性为空"; // 获取需要拷贝的属性值
                     swCusPropMgr.Add2(propertyName, 30, propertyValue);
                 }
 
@@ -1395,15 +1408,45 @@ internal class SldWorkService
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns> 返回一个新列表
+
     public List<string> ExtractBracketContent(string input)
     {
         var matches = Regex.Matches(input, @"\[(.*?)\]");
         var result = new List<string>();
         foreach (Match match in matches)
         {
-            result.Add(match.Value);
+            result.Add(match.Groups[1].Value);
         }
         return result;
     }
+
+    public List<string> ExtractContentAfterUnderscore(string input)
+    {
+        var result = new List<string>();
+        var index = input.IndexOf('_');
+        if (index >= 0 && index < input.Length - 1)
+        {
+            var substr = input.Substring(index + 1);
+            var parts = substr.Split('+');
+            foreach (var part in parts)
+            {
+                if (!string.IsNullOrWhiteSpace(part))
+                {
+                    result.Add(part.Trim());
+                }
+            }
+        }
+        return result;
+    }
+    public string ExtractContentWithinBrackets(string input)
+    {
+        var match = Regex.Match(input, @"\[(.*?)\]");
+        if (match.Success)
+        {
+            return match.Groups[1].Value;
+        }
+        return string.Empty;
+    }
+
 
 }
