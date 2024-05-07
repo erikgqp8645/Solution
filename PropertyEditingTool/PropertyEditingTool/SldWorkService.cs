@@ -966,6 +966,28 @@ internal class SldWorkService
                 }
                 swCusPropMgr.Add2(propertyName, 30, propertyValue);
             }
+            // TODO 这里增加一个if添加组合属性的方法
+            if (rule.Contains($"组合属性"))
+            {
+
+                List<string> tempValue = ExtractContentAfterUnderscore(rule);
+                StringBuilder combinedValue = new StringBuilder();
+                foreach (string temp in tempValue)
+                {
+                    string _propertyValue = swCusPropMgr.Get(temp) ?? "属性为空"; // 获取需要组合的属性值
+                    combinedValue.Append(_propertyValue).Append(" "); // 组合属性值
+                }
+                propertyValue = combinedValue.ToString().TrimEnd(); // 最终的组合结果，移除末尾的空格
+
+
+                swCusPropMgr.Add2(propertyName, 30, propertyValue);
+            }
+            if (rule.Contains($"拷贝属性"))
+            {
+                string _rule = ExtractContentWithinBrackets(rule);
+                propertyValue = swCusPropMgr.Get(_rule) ?? "属性为空"; // 获取需要拷贝的属性值
+                swCusPropMgr.Add2(propertyName, 30, propertyValue);
+            }
             else
             {
                 switch (rule)
@@ -1092,6 +1114,29 @@ internal class SldWorkService
                     int? number = ExtractNumberFromRule(rule);
                     propertyValue = splitResult2[(int)number - 1];
                 }
+                swCusPropMgr.Add2(propertyName, 30, propertyValue);
+            }
+
+            // TODO 这里增加一个if添加组合属性的方法
+            if (rule.Contains($"组合属性"))
+            {
+
+                List<string> tempValue = ExtractContentAfterUnderscore(rule);
+                StringBuilder combinedValue = new StringBuilder();
+                foreach (string temp in tempValue)
+                {
+                    string _propertyValue = swCusPropMgr.Get(temp) ?? "属性为空"; // 获取需要组合的属性值
+                    combinedValue.Append(_propertyValue).Append(" "); // 组合属性值
+                }
+                propertyValue = combinedValue.ToString().TrimEnd(); // 最终的组合结果，移除末尾的空格
+
+
+                swCusPropMgr.Add2(propertyName, 30, propertyValue);
+            }
+            if (rule.Contains($"拷贝属性"))
+            {
+                string _rule = ExtractContentWithinBrackets(rule);
+                propertyValue = swCusPropMgr.Get(_rule) ?? "属性为空"; // 获取需要拷贝的属性值
                 swCusPropMgr.Add2(propertyName, 30, propertyValue);
             }
             else

@@ -1531,8 +1531,8 @@ public class FrmMain : Form
         cmbPropertyValue.Items.Add("$表面积");
         cmbPropertyValue.Items.Add("$配置名");
         cmbPropertyValue.Items.Add("$短日期");
-        cmbPropertyValue.Items.Add("$组合属性");
-        cmbPropertyValue.Items.Add("$拷贝属性");
+        cmbPropertyValue.Items.Add("$组合属性_*+*");
+        cmbPropertyValue.Items.Add("$拷贝属性[属性名称]");
     }
 
     private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -2355,7 +2355,7 @@ public class FrmMain : Form
         this.Font = new System.Drawing.Font("微软雅黑", 10.5f, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, 134);
         base.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
         base.Name = "FrmMain";
-        this.Text = "属性批量编辑工具 By:郭小鸟";
+        this.Text = "属性批量编辑工具 By:郭";
         base.FormClosing += new System.Windows.Forms.FormClosingEventHandler(FrmMain_FormClosing);
         base.Load += new System.EventHandler(FrmMain_Load);
         this.menuStrip.ResumeLayout(false);
